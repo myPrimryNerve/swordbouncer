@@ -29,6 +29,11 @@ enemyY = 408
 
 fpsLimiter = pygame.time.Clock()
 
+def rotCenter(image, rect, angle):
+        rotImage = pygame.transform.rotate(image, angle)
+        rotRect = rotImage.get_rect(center=rect.center)
+        return rotImage,rotRect
+
 def angles():
     global posSwordX, posSwordY, startAngle
     angle = startAngle * 3.14 / 180
@@ -54,9 +59,15 @@ def runGame():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
             angles()
+            rect = sword.get_rect(center=(int(posSwordX), int(posSwordY)))
+            surf, r = rotCenter(sword, rect, -4)
+            display.blit(surf, r)
             startAngle -= 4
         elif keys[pygame.K_d]:
             angles()
+            rect = sword.get_rect(center=(int(posSwordX), int(posSwordY)))
+            surf, r = rotCenter(sword, rect, 4)
+            display.blit(surf, r)
             startAngle += 4
 
         display.blit(bg, (0, 0))
@@ -64,7 +75,6 @@ def runGame():
         display.blit(mc, (576, 400))
         display.blit(sword, (int(posSwordX), int(posSwordY)))
         display.blit(land, (0, 592))
-
 
         pygame.display.update()
         fpsLimiter.tick(60)
