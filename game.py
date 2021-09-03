@@ -1,5 +1,6 @@
 import math
 import pygame
+import time
 
 pygame.init()
 
@@ -14,6 +15,21 @@ startAngle = 0
 
 pygame.display.set_caption('Sword bouncer')
 sword = pygame.image.load('sword.png')
+enemySkeletonSprite1 = pygame.image.load('enemySprite1.png')
+enemySkeletonSprite2 = pygame.image.load('enemySprite2.png')
+enemySkeletonSprite3 = pygame.image.load('enemySprite3.png')
+enemySkeletonSprite4 = pygame.image.load('enemySprite4.png')
+enemySkeletonSprite5 = pygame.image.load('enemySprite5.png')
+enemySkeletonSprite6 = pygame.image.load('enemySprite6.png')
+enemySkeletonSprite7 = pygame.image.load('enemySprite7.png')
+enemySkeletonSprite8 = pygame.image.load('enemySprite8.png')
+enemySkeletonSprite9 = pygame.image.load('enemySprite9.png')
+enemySkeletonSprite10 = pygame.image.load('enemySprite10.png')
+enemySkeletonSprite11 = pygame.image.load('enemySprite11.png')
+enemySkeletonSprite12 = pygame.image.load('enemySprite12.png')
+
+sprites = [enemySkeletonSprite1, enemySkeletonSprite2, enemySkeletonSprite3, enemySkeletonSprite4, enemySkeletonSprite5, enemySkeletonSprite6,
+           enemySkeletonSprite7, enemySkeletonSprite8, enemySkeletonSprite9, enemySkeletonSprite10, enemySkeletonSprite11, enemySkeletonSprite12]
 
 icon = pygame.image.load('icon.png')
 pygame.display.set_icon(icon)
@@ -33,7 +49,6 @@ fpsLimiter = pygame.time.Clock()
 def rotate(angle):
     global sword
     sword = pygame.transform.rotate(sword, angle)
-    new_rect = sword.get_rect(center=sword.get_rect(center=(int(posSwordX)+16, int(posSwordY)+64)).center)
     rotated_image = pygame.transform.rotate(sword, angle)
     new_rect = rotated_image.get_rect(center=sword.get_rect(topleft=(int(posSwordX)-32, int(posSwordY)-128)).center)
     display.blit(sword, new_rect.topleft)
@@ -79,12 +94,41 @@ def runGame():
 
         pygame.display.update()
         fpsLimiter.tick(60)
+def animate():
+    global skeletonAnimated
+    skeletonAnimated = sprites[0]
+    time.sleep(0.1)
+    skeletonAnimated = sprites[1]
+    time.sleep(0.1)
+    skeletonAnimated = sprites[2]
+    time.sleep(0.1)
+    skeletonAnimated = sprites[3]
+    time.sleep(0.1)
+    skeletonAnimated = sprites[4]
+    time.sleep(0.1)
+    skeletonAnimated = sprites[5]
+    time.sleep(0.1)
+    skeletonAnimated = sprites[6]
+    time.sleep(0.1)
+    skeletonAnimated = sprites[7]
+    time.sleep(0.1)
+    skeletonAnimated = sprites[8]
+    time.sleep(0.1)
+    skeletonAnimated = sprites[9]
+    time.sleep(0.1)
+    skeletonAnimated = sprites[10]
+    time.sleep(0.1)
+    skeletonAnimated = sprites[11]
+    time.sleep(0.1)
+    return skeletonAnimated
+
 
 def drawEnemy():
     global enemyX, enemyY, enemyWidth, enemyHeight
 
     if enemyX >= -enemyWidth:
-        pygame.draw.rect(display, (0, 255, 255), (enemyX, enemyY, enemyWidth, enemyHeight))
+        while True:
+            display.blit(animate(), (enemyX, enemyY, enemyWidth, enemyHeight))
         enemyX -= 4
     else:
         enemyX = displayWidth - 50
