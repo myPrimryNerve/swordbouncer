@@ -1,5 +1,4 @@
 import math
-import time
 import pygame
 
 pygame.init()
@@ -21,6 +20,22 @@ sprites = [pygame.image.load('enemySprite1.png'), pygame.image.load('enemySprite
            pygame.image.load('enemySprite10.png'), pygame.image.load('enemySprite11.png'), pygame.image.load('enemySprite12.png')]
 
 imgCounter = 11
+
+def checkKill():
+    if int(posSwordY) + 32 >= enemyY:
+        if enemyX <= int(posSwordX) <= enemyX + 128:
+            return True
+        elif enemyX <= int(posSwordX) + 32 <= enemyX + 128:
+            return True
+    return False
+
+def checkGameOver():
+    if int(mcY) + 184 >= enemyY:
+        if enemyX <= int(mcX) <= enemyX + 128:
+            return True
+        elif enemyX <= int(mcX) + 32 <= enemyX + 128:
+            return True
+    return False
 
 def drawEnemy():
     global imgCounter, enemyX, enemyY, enemyWidth, enemyHeight
@@ -84,7 +99,14 @@ def runGame():
         display.blit(sword, (int(posSwordX), int(posSwordY)))
         display.blit(land, (0, 592))
         drawEnemy()
+
+        if checkKill() == True:
+           pygame.draw.rect(display, (255, 0, 255), (500, 500, 100, 100))
+
+        if checkGameOver() == True:
+            game = False
+
         pygame.display.update()
-        fpsLimiter.tick(600)
+        fpsLimiter.tick(60)
 
 runGame()
