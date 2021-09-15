@@ -26,6 +26,7 @@ spritesMc = [pygame.image.load('mc.png'), pygame.image.load('mc1.png'), pygame.i
 imgCounter = 11
 imgCounterMc = 6
 mainTemp = 0
+startAngle3 = -272
 
 icon = pygame.image.load('icon.png')
 pygame.display.set_icon(icon)
@@ -101,13 +102,13 @@ def anglesForMc(range):
     mcY = (150 * math.sin(angle)) + 400
 
 def anglesForMc2(range):
-    global mcX, mcY, startAngle2
-    angle = startAngle2 * 3.14 / 180
-    mcX = (150 * math.sin(-angle)) + posSwordX - range
-    mcY = (150 * math.cos(-angle)) + 400
+    global mcX, mcY, startAngle3
+    angle = startAngle3 * 3.14 / 180
+    mcX = (150 * math.sin(-angle)) + posSwordX - range          # -272 начальный угол лева
+    mcY = (150 * math.cos(-angle)) + 400                        #
 
 def runGame():
-    global posSwordX, posSwordY, startAngle, startAngle2, mainTemp, imgCounterMc
+    global posSwordX, posSwordY, startAngle, startAngle2, mainTemp, imgCounterMc, startAngle3
 
     bg = pygame.image.load('bg.png')
     land = pygame.image.load('land.png')
@@ -120,80 +121,45 @@ def runGame():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        #if checkLand() == False:
-            #keys = pygame.key.get_pressed()
-            #if keys[pygame.K_a]:
-                #anglesForSword()
-                #startAngle -= 4
-            #elif keys[pygame.K_d]:
-                #anglesForSword()
-                #startAngle += 4
-        #if checkLand() == True:
-            #keys = pygame.key.get_pressed()
-            #if keys[pygame.K_a]:
-                #anglesForMc(49)
-                #startAngle2 -= 4
-            #elif keys[pygame.K_d]:
-                #anglesForMc(49)
-                #startAngle2 += 4
-        if posSwordY <= 560 and mainTemp != 7:
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_a]:
-                anglesForSword()
-                startAngle -= 4
-            if keys[pygame.K_d]:
-                anglesForSword()
-                startAngle += 4
-
-        if posSwordY >= 560 and mainTemp == 8:
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_a] and startAngle >= -208:
-                anglesForSword()
-                startAngle -= 4
-            if keys[pygame.K_d] and startAngle <= -332:
-                anglesForSword()
-                startAngle += 4
-            if startAngle >= -332:
-                mainTemp = 9
-
-        if mainTemp == 7:
-            if posSwordX - 176 < 0:
-                mainTemp = 8
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_a]:
-                anglesForSword()
-                startAngle -= 4
-            if keys[pygame.K_d]:
-                anglesForSword()
-                startAngle += 4
-
-        if mainTemp != 7:
-            if posSwordY >= 560:
-                if checkMc() == True and mainTemp != 5 and mainTemp != 6:
-                    if posSwordX < mcX:
-                        mainTemp = 5
-                    if posSwordX > mcX:
-                        mainTemp = 6
-                        startAngle2 = -272
-                if mainTemp == 5:
-                    keys = pygame.key.get_pressed()
-                    if keys[pygame.K_a]:
-                        anglesForMc(49)
-                        startAngle2 -= 4
-                        if mcY > 399 and mcX < posSwordX:
-                            mainTemp = 7
-                            startAngle = -332
-                    if keys[pygame.K_d]:
-                        anglesForMc(49)
+        if 408 > mcY > 0 and mainTemp == 0:
+            if -208 < startAngle < 28:
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_a]:
+                    anglesForSword()
+                    startAngle -= 4
+                if keys[pygame.K_d]:
+                    anglesForSword()
+                    startAngle += 4
+            if -208 > startAngle > -212:
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_a]:
+                    anglesForMc(41)
+                    startAngle2 -= 4
+                if keys[pygame.K_d]:
+                    if mcY > 399:
+                        anglesForSword()
+                        startAngle += 4
+                if keys[pygame.K_d]:
+                    if mcY < 399:
+                        anglesForMc(41)
                         startAngle2 += 4
-                if mainTemp == 6:
-                    keys = pygame.key.get_pressed()
-                    if keys[pygame.K_a]:
+            if 28 < startAngle < 32:
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_a]:
+                    if mcY > 399:
+                        anglesForSword()
+                        startAngle -= 4
+                if keys[pygame.K_a]:
+                    if mcY < 399:
                         anglesForMc2(49)
-                        startAngle2 -= 4
-                    if keys[pygame.K_d]:
-                        anglesForMc2(49)
-                        startAngle2 += 4
+                        startAngle3 -= 4
+                if keys[pygame.K_d]:
+                    anglesForMc2(49)
+                    startAngle3 += 4
+        if mcX < 277:
+            mainTemp = 5
+        if mainTemp == 5:
+
 
         display.blit(bg, (0, 0))
         if imgCounterMc == 30:
