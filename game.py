@@ -2,6 +2,7 @@ import math
 import pygame
 import random
 
+pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 
 displayWidth = 1280
@@ -42,6 +43,7 @@ rattle = pygame.mixer.Sound('boss1.mp3')
 swipe = pygame.mixer.Sound('boss2.mp3')
 pygame.mixer.music.load('bg.mp3')
 gameOver = pygame.image.load('gameover.png')
+punch = pygame.mixer.Sound('punch.mp3')
 
 imgCounter = 0
 imgCounterMc = 0
@@ -80,7 +82,7 @@ fpsLimiter = pygame.time.Clock()
 def gameOverNotFunc():
     global gameOverTemp, overGame
     display.blit(gameOver, (128, 200))
-    if gameOverTemp >= 10:
+    if gameOverTemp >= 1:
         overGame = True
     else:
         gameOverTemp += 1
@@ -150,10 +152,10 @@ def checkGameOver():
             return True
     return False
 
-def drawEnemy():
+def drawEnemy(axis):
     global imgCounter, enemyX, enemyY, enemyWidth, enemyHeight
     if enemyX >= -enemyWidth:
-        enemyX -= 2
+        enemyX -= axis
     else:
         enemyX = displayWidth - 50
     if imgCounter == 55:
@@ -227,8 +229,6 @@ def runGame():
                 posSwordX -= 4
 
 
-
-
         display.blit(bg, (0, 0))
         if imgCounterMc == 30:
             imgCounterMc = 0
@@ -236,9 +236,10 @@ def runGame():
         imgCounterMc += 1
         display.blit(sword, (int(posSwordX), int(posSwordY)))
         display.blit(land, (0, 592))
-        drawEnemy()
+        drawEnemy(2)
 
         if checkKill() == True:
+            pygame.mixer.Sound.play(punch)
             enemyX = 1400
             mainTempF += 1
         if imgCounterDeath >= 28:
@@ -254,7 +255,7 @@ def runGame():
             if jump == False:
                 mainTempF = 0
                 something = 0
-        if mainTempF <= 1 and jump == False:
+        if mainTempF <= 10 and jump == False:
             pygame.mixer.Sound.play(rattle)
             jump = True
         if checkGameOver() == True:
